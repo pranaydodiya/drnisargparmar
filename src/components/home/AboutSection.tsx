@@ -5,13 +5,13 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export function AboutSection() {
   return (
-    <section id="about" className="py-16 md:py-24" aria-labelledby="about-heading">
+    <section id="about" className="py-10 md:py-14" aria-labelledby="about-heading">
       <div className="container mx-auto px-4">
         <SectionHeading
           id="about-heading"
           title="About Dr. Nisarg Parmar"
           subtitle="NIMHANS-trained neurosurgeon dedicated to expert neurological care in Gujarat."
-          className="mb-12"
+          className="mb-8"
         />
         <div className="max-w-3xl mx-auto space-y-6 text-muted-foreground">
           <p className="text-base md:text-lg">
