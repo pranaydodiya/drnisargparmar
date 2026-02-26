@@ -41,25 +41,57 @@ export function FAQSection() {
           subtitle="Common questions about our practice and services."
           className="mb-12"
         />
-        <div className="max-w-2xl mx-auto space-y-2">
+        <div className="max-w-2xl mx-auto space-y-3">
           {FAQ_ITEMS.map((item, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={index}
-                className="border border-border rounded-xl bg-card overflow-hidden"
+                className={cn(
+                  "group relative border border-border rounded-2xl bg-card/90 overflow-hidden",
+                  "transition-all duration-300 ease-out",
+                  "hover:-translate-y-0.5 hover:shadow-lg hover:border-secondary/50",
+                  isOpen && "border-secondary/60 shadow-lg"
+                )}
               >
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-secondary/5 via-secondary/0 to-transparent"
+                  aria-hidden
+                />
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full flex items-center justify-between gap-4 py-4 px-5 text-left font-medium text-foreground hover:bg-muted/50 focus-visible:ring-2 ring-ring ring-inset rounded-xl"
+                  className={cn(
+                    "relative z-10 w-full flex items-center justify-between gap-4 py-4 px-5 text-left font-medium text-foreground",
+                    "focus-visible:ring-2 ring-ring ring-inset rounded-2xl"
+                  )}
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${index}`}
                   id={`faq-question-${index}`}
                 >
-                  {item.q}
+                  <span className="flex items-center gap-3">
+                    <span
+                      className={cn(
+                        "inline-flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold",
+                        "transition-colors duration-300",
+                        isOpen
+                          ? "bg-secondary text-secondary-foreground border-secondary"
+                          : "bg-background/60 text-muted-foreground border-border"
+                      )}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="relative">
+                      <span className="block group-hover:text-foreground transition-colors">
+                        {item.q}
+                      </span>
+                    </span>
+                  </span>
                   <ChevronDown
-                    className={cn("h-5 w-5 shrink-0 transition-transform", isOpen && "rotate-180")}
+                    className={cn(
+                      "h-5 w-5 shrink-0 transition-transform duration-300",
+                      isOpen ? "rotate-180" : "rotate-0"
+                    )}
                     aria-hidden
                   />
                 </button>
@@ -67,9 +99,14 @@ export function FAQSection() {
                   id={`faq-answer-${index}`}
                   role="region"
                   aria-labelledby={`faq-question-${index}`}
-                  className={cn(isOpen ? "block" : "hidden")}
+                  className={cn(
+                    "grid transition-all duration-300 ease-out bg-card/80 relative z-10",
+                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                  )}
                 >
-                  <p className="pb-4 px-5 pt-0 text-muted-foreground">{item.a}</p>
+                  <div className="overflow-hidden">
+                    <p className="pb-4 px-5 pt-0 text-muted-foreground">{item.a}</p>
+                  </div>
                 </div>
               </div>
             );

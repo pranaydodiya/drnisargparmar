@@ -10,7 +10,7 @@ const STATS = [
 
 export function TrustIndicators() {
   return (
-    <section id="trust" className="py-16 md:py-24 bg-muted/30" aria-labelledby="trust-heading">
+    <section id="trust" className="py-10 md:py-14 bg-muted/30" aria-labelledby="trust-heading">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {STATS.map(({ label, icon: Icon }) => (
