@@ -8,11 +8,11 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative overflow-hidden bg-primary text-primary-foreground py-16 md:py-24 lg:py-28"
+      className="relative overflow-hidden bg-primary text-primary-foreground"
       aria-labelledby="hero-heading"
     >
-      <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-        <div className="flex-1 space-y-6 text-center lg:text-left">
+      <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center gap-10 lg:gap-16 pt-16 pb-16 md:pt-20 md:pb-20 lg:pt-20 lg:pb-24">
+        <div className="flex-1 space-y-5 text-center lg:text-left">
           <p className="text-primary-foreground/90 text-sm md:text-base font-medium">
             Alumni of NIMHANS, Bangalore • India&apos;s Top Neurosurgical Institution
           </p>
