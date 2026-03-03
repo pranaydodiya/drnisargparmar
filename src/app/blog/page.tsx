@@ -20,7 +20,7 @@ function formatDate(dateStr: string) {
 
 export default function BlogListPage() {
   return (
-    <div className="py-16 md:py-24 pb-20">
+    <div className="pt-10 pb-20 md:pt-16 md:pb-24">
       <div className="container mx-auto px-4">
         <SectionHeading
           title="Blog"

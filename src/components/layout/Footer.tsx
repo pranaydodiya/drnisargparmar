@@ -26,32 +26,32 @@ export function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/about" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
+                <Link prefetch href="/about" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/specialties" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
+                <Link prefetch href="/specialties" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
                   Specialties
                 </Link>
               </li>
               <li>
-                <Link href="/testimonials" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
+                <Link prefetch href="/testimonials" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
                   Testimonials
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
+                <Link prefetch href="/blog" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/appointments" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
+                <Link prefetch href="/appointments" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
                   Book Appointment
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
+                <Link prefetch href="/contact" className="text-primary-foreground/90 hover:text-primary-foreground text-sm focus-visible:ring-2 ring-primary-foreground ring-offset-2 ring-offset-primary rounded">
                   Contact
                 </Link>
               </li>

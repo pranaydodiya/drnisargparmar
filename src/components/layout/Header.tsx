@@ -57,11 +57,11 @@ export function Header() {
             <div className="relative h-10 w-10 md:h-11 md:w-11 rounded-full overflow-hidden bg-muted shrink-0 flex items-center justify-center">
               <LogoImage />
             </div>
-            <div className="hidden sm:block">
-              <span className="font-bold text-base md:text-lg text-foreground block leading-tight">
+            <div className="block">
+              <span className="font-bold text-sm sm:text-base md:text-lg text-foreground block leading-tight">
                 Dr. Nisarg Parmar
               </span>
-              <span className="text-[10px] md:text-xs text-muted-foreground block">
+              <span className="text-[9px] sm:text-[10px] md:text-xs text-muted-foreground block">
                 Neurosurgeon | Brain & Spine
               </span>
             </div>
@@ -78,6 +78,7 @@ export function Header() {
                   <Link
                     key={href}
                     href={href}
+                    prefetch
                     className={cn(
                       "px-3 py-2 text-sm font-medium rounded-full min-h-[44px] inline-flex items-center justify-center transition-all duration-200 focus-visible:ring-2 ring-ring ring-offset-2",
                       isActive
@@ -144,6 +145,7 @@ export function Header() {
               <Link
                 key={href}
                 href={href}
+                prefetch
                 onClick={() => setMobileOpen(false)}
                 className={cn(
                   "block py-3 px-4 text-base font-medium rounded-xl focus-visible:ring-2 ring-ring ring-offset-2",

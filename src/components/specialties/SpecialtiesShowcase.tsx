@@ -170,7 +170,7 @@ function ProgramCard({
       ref={ref}
       style={{ scale, y }}
       className={cn(
-        "relative mx-auto max-w-5xl rounded-[32px] border border-slate-200/80 bg-white/80 cursor-pointer",
+        "relative mx-auto w-full max-w-6xl rounded-[32px] border border-slate-200/80 bg-white/80 cursor-pointer",
         "shadow-[0_24px_80px_rgba(15,23,42,0.18)] backdrop-blur-md",
         "overflow-hidden"
       )}
