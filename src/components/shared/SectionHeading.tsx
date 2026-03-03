@@ -18,7 +18,7 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "space-y-2",
+        "space-y-3",
         centered && "text-center max-w-2xl mx-auto",
         className
       )}

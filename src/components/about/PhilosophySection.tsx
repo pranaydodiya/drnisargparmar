@@ -108,7 +108,7 @@ export function PhilosophySection() {
                       <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-secondary/90">
                         {stat.label}
                       </p>
-                      <p className="mt-2 text-2xl font-semibold text-slate-900">
+                      <p className="mt-2 text-3xl font-semibold text-slate-900 md:text-4xl">
                         {stat.type === "count"
                           ? `${countValue}${stat.suffix}`
                           : stat.text}

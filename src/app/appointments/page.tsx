@@ -25,7 +25,7 @@ export default function AppointmentsPage() {
 
   if (submitted) {
     return (
-      <div className="py-16 md:py-24 pb-20">
+      <div className="pt-10 pb-20 md:pt-16 md:pb-24">
         <div className="container mx-auto px-4 max-w-xl">
           <Card className="border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-800">
             <CardContent className="pt-8 pb-8 text-center">
@@ -41,7 +41,7 @@ export default function AppointmentsPage() {
   }
 
   return (
-    <div className="py-16 md:py-24 pb-20">
+    <div className="pt-10 pb-20 md:pt-16 md:pb-24">
       <div className="container mx-auto px-4">
         <SectionHeading
           title="Book an Appointment"
