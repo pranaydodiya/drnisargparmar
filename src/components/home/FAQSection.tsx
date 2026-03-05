@@ -33,13 +33,13 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="py-16 md:py-24 bg-muted/30" aria-labelledby="faq-heading">
-      <div className="container mx-auto px-4">
+    <section id="faq" className="py-12 md:py-16 bg-muted/30" aria-labelledby="faq-heading">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <SectionHeading
           id="faq-heading"
           title="Frequently Asked Questions"
           subtitle="Common questions about our practice and services."
-          className="mb-12"
+          className="mb-10"
         />
         <div className="max-w-2xl mx-auto space-y-3">
           {FAQ_ITEMS.map((item, index) => {
@@ -62,7 +62,7 @@ export function FAQSection() {
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className={cn(
-                    "relative z-10 w-full flex items-center justify-between gap-4 py-4 px-5 text-left font-medium text-foreground",
+                    "relative z-10 w-full flex items-center justify-between gap-4 py-4 px-5 text-left font-medium text-foreground text-sm sm:text-base",
                     "focus-visible:ring-2 ring-ring ring-inset rounded-2xl"
                   )}
                   aria-expanded={isOpen}
@@ -76,7 +76,7 @@ export function FAQSection() {
                         "transition-colors duration-300",
                         isOpen
                           ? "bg-secondary text-secondary-foreground border-secondary"
-                          : "bg-background/60 text-muted-foreground border-border"
+                          : "bg-background/60 text-foreground/60 border-border"
                       )}
                     >
                       {index + 1}
@@ -105,7 +105,7 @@ export function FAQSection() {
                   )}
                 >
                   <div className="overflow-hidden">
-                    <p className="pb-4 px-5 pt-0 text-muted-foreground">{item.a}</p>
+                    <p className="pb-4 px-5 pt-0 text-foreground/65 text-sm">{item.a}</p>
                   </div>
                 </div>
               </div>
