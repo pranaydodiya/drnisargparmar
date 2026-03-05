@@ -106,20 +106,20 @@ const MOCK_TESTIMONIALS = [
 
 export function TestimonialsSection() {
   return (
-    <>
+    <div>
       <TestimonialsSectionWithMarquee
         title="What Patients Say"
         description="Real experiences from patients and families who trusted Dr. Nisarg Parmar with their brain and spine care."
         testimonials={MOCK_TESTIMONIALS}
       />
-      <div className="container mx-auto px-4 pb-12 text-center">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 pb-8 text-center">
         <Link
           href="/testimonials"
-          className="text-secondary font-medium hover:underline focus-visible:ring-2 ring-ring rounded"
+          className="text-secondary font-medium text-sm hover:underline focus-visible:ring-2 ring-ring rounded"
         >
           View all testimonials
         </Link>
       </div>
-    </>
+    </div>
   );
 }

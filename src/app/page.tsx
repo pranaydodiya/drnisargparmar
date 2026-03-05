@@ -14,28 +14,14 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <TrustIndicators />
+      <AboutSection />
+      <WhyChoose />
+      <SpecialtiesSection />
+      <TestimonialsSection />
+      <AppointmentCTA />
+      <ContactLocationsSection />
       <SectionReveal>
-        <TrustIndicators />
-      </SectionReveal>
-      <SectionReveal delay={0.1}>
-        <AboutSection />
-      </SectionReveal>
-      <SectionReveal delay={0.1}>
-        <WhyChoose />
-      </SectionReveal>
-      <SectionReveal delay={0.1}>
-        <SpecialtiesSection />
-      </SectionReveal>
-      <SectionReveal delay={0.1}>
-        <TestimonialsSection />
-      </SectionReveal>
-      <SectionReveal delay={0.1}>
-        <AppointmentCTA />
-      </SectionReveal>
-      <SectionReveal delay={0.1}>
-        <ContactLocationsSection />
-      </SectionReveal>
-      <SectionReveal delay={0.1}>
         <FAQSection />
       </SectionReveal>
       <SectionReveal delay={0.1}>

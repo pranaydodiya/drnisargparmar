@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import {
   TestimonialCard,
@@ -27,51 +27,81 @@ export function TestimonialsSectionWithMarquee({
   testimonials,
   className,
 }: TestimonialsSectionProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const animationRef = useRef<number | null>(null);
+  const positionRef = useRef(0);
+
+  // Duplicate for seamless loop
+  const doubled = [...testimonials, ...testimonials];
+
+  const animate = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) {
+      animationRef.current = requestAnimationFrame(animate);
+      return;
+    }
+
+    if (!isPaused) {
+      positionRef.current += 0.5;
+      const halfWidth = el.scrollWidth / 2;
+      if (halfWidth > 0 && positionRef.current >= halfWidth) {
+        positionRef.current = 0;
+      }
+      el.style.transform = `translateX(-${positionRef.current}px)`;
+    }
+
+    animationRef.current = requestAnimationFrame(animate);
+  }, [isPaused]);
+
+  useEffect(() => {
+    animationRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [animate]);
+
   return (
     <section
       id="testimonials"
-      className={cn(
-        "bg-background text-foreground",
-        "py-12 sm:py-24 md:py-32 px-0",
-        className
-      )}
-      aria-labelledby="testimonials-marquee-heading"
+      className={cn("bg-background text-foreground py-12 md:py-16", className)}
+      aria-labelledby="testimonials-heading"
     >
-      <div className="mx-auto flex max-w-container flex-col items-center gap-4 text-center sm:gap-16">
-        <div className="flex flex-col items-center gap-4 px-4 sm:gap-8">
-          <h2
-            id="testimonials-marquee-heading"
-            className="max-w-[720px] text-3xl font-semibold leading-tight sm:text-5xl sm:leading-tight"
-          >
-            {title}
-          </h2>
-          <p className="text-md max-w-[600px] font-medium text-muted-foreground sm:text-xl">
-            {description}
-          </p>
-        </div>
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 mb-8 text-center">
+        <h2
+          id="testimonials-heading"
+          className="text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground mb-3"
+        >
+          {title}
+        </h2>
+        <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto">
+          {description}
+        </p>
+      </div>
 
-        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-          <div className="group flex overflow-hidden p-2 [--gap:1rem] [gap:var(--gap)] flex-row [--duration:160s]">
-            <div className="flex shrink-0 justify-around [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]">
-              {[...Array(4)].map((_, setIndex) => (
-                <React.Fragment key={setIndex}>
-                  {testimonials.map((testimonial, i) => (
-                    <TestimonialCard
-                      key={`${setIndex}-${i}`}
-                      author={testimonial.author}
-                      text={testimonial.text}
-                      href={testimonial.href}
-                      rating={testimonial.rating ?? 5}
-                    />
-                  ))}
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
-
-          <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-1/3 bg-gradient-to-r from-background sm:block" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 bg-gradient-to-l from-background sm:block" />
+      <div
+        className="relative w-full overflow-hidden"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+      >
+        <div
+          ref={scrollRef}
+          className="flex gap-4 px-4 will-change-transform"
+          style={{ width: "max-content" }}
+        >
+          {doubled.map((testimonial, i) => (
+            <TestimonialCard
+              key={`t-${i}`}
+              author={testimonial.author}
+              text={testimonial.text}
+              href={testimonial.href}
+              rating={testimonial.rating ?? 5}
+            />
+          ))}
         </div>
+        {/* No gradient overlays — clean edges */}
       </div>
     </section>
   );

@@ -1,349 +1,348 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  ArrowRight,
+  Brain,
+  Bone,
+  AlertTriangle,
+  Baby,
+  Heart,
+  Minimize2,
+} from "lucide-react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
-
-const CARD_WIDTH_VW = 52;
-const CARD_GAP_VW = 4;
-const TRACK_WIDTH_VW = 6 * CARD_WIDTH_VW + 5 * CARD_GAP_VW;
-const TAIL_PADDING_VW = 14;
-const SCROLL_RUNWAY_VH = 400;
+import { Button } from "@/components/ui/button";
 
 const SPECIALTIES = [
-  { title: "Brain Tumor Surgery", category: "Neurosurgery", description: "Advanced surgical treatment for brain tumors with precision and care.", bullets: ["Precision imaging & planning", "Minimal access techniques", "Comprehensive follow-up care"] },
-  { title: "Spine Surgery", category: "Spine Care", description: "Comprehensive spine solutions for disc, deformity, and trauma cases.", bullets: ["Disc & decompression", "Spinal fusion & instrumentation", "Rehabilitation support"] },
-  { title: "Neurotrauma Care", category: "Emergency", description: "Emergency neurosurgical care for head and spine injuries.", bullets: ["24/7 emergency response", "Head & spinal trauma", "Critical care coordination"] },
-  { title: "Pediatric Neurosurgery", category: "Pediatrics", description: "Specialized care for children with neurological conditions.", bullets: ["Child-focused protocols", "Family-centered care", "Developmental considerations"] },
-  { title: "Vascular Neurosurgery", category: "Vascular", description: "Treatment of aneurysms, AVMs, and vascular brain conditions.", bullets: ["Aneurysm clipping & coiling", "AVM treatment", "Stroke intervention"] },
-  { title: "Minimally Invasive Surgery", category: "Advanced", description: "Advanced techniques for faster recovery and minimal scarring.", bullets: ["Endoscopic approaches", "Faster recovery times", "Reduced scarring"] },
+  {
+    title: "Brain Tumor Surgery",
+    description:
+      "Advanced surgical treatment for brain tumors with precision imaging and minimal access techniques.",
+    icon: Brain,
+    procedures: [
+      "Craniotomy & tumor removal",
+      "Stereotactic brain biopsy",
+      "Transsphenoidal pituitary surgery",
+      "Awake craniotomy",
+    ],
+  },
+  {
+    title: "Spine Surgery",
+    description:
+      "Comprehensive spine solutions for disc, deformity, and trauma cases focused on stability and mobility.",
+    icon: Bone,
+    procedures: [
+      "Lumbar disc herniation repair",
+      "Cervical disc replacement",
+      "Spinal decompression & fusion",
+      "Scoliosis correction surgery",
+    ],
+  },
+  {
+    title: "Neurotrauma Care",
+    description:
+      "24/7 emergency neurosurgical care for head and spine injuries with rapid response.",
+    icon: AlertTriangle,
+    procedures: [
+      "Emergency craniotomy",
+      "Subdural & epidural hematoma evacuation",
+      "Depressed skull fracture repair",
+      "Spinal cord injury management",
+    ],
+  },
+  {
+    title: "Pediatric Neurosurgery",
+    description:
+      "Specialized child-focused protocols with family-centered care and developmental considerations.",
+    icon: Baby,
+    procedures: [
+      "Hydrocephalus (VP shunt placement)",
+      "Myelomeningocele repair",
+      "Chiari malformation surgery",
+      "Craniosynostosis correction",
+    ],
+  },
+  {
+    title: "Vascular Neurosurgery",
+    description:
+      "Treatment of aneurysms, AVMs, and vascular brain conditions including stroke intervention.",
+    icon: Heart,
+    procedures: [
+      "Aneurysm clipping & coiling",
+      "AVM excision",
+      "Carotid endarterectomy",
+      "Emergency stroke intervention",
+    ],
+  },
+  {
+    title: "Minimally Invasive Surgery",
+    description:
+      "Endoscopic and keyhole approaches for faster recovery, reduced scarring, and shorter hospital stays.",
+    icon: Minimize2,
+    procedures: [
+      "Neuroendoscopy",
+      "Keyhole craniotomy",
+      "Minimally invasive spine procedures",
+      "Image-guided surgery",
+    ],
+  },
 ] as const;
 
-function CinematicCard({
-  title,
-  category,
-  description,
-  bullets,
-  index,
-  translateX,
-  isMobile,
-  onExplore,
-}: {
-  title: string;
-  category: string;
-  description: string;
-  bullets: readonly string[];
-  index: number;
-  translateX: number;
-  isMobile: boolean;
-  onExplore: () => void;
-}) {
-  const cardCenterVw = index * (CARD_WIDTH_VW + CARD_GAP_VW) + CARD_WIDTH_VW / 2;
-  const viewportCenterInTrackVw = 50 - translateX;
-  const distance = Math.abs(cardCenterVw - viewportCenterInTrackVw);
-  const isActive = distance < 45;
-  const scale = isActive ? 1.02 : 0.96;
-  const opacity = isActive ? 1 : 0.88;
-
-  return (
-    <div
-      className={cn(
-        "flex-shrink-0 rounded-[34px] md:rounded-[40px] overflow-hidden shadow-2xl transition-all duration-300 ease-out",
-        "border border-white/10",
-        !isMobile && "will-change-transform"
-      )}
-      style={
-        isMobile
-          ? undefined
-          : {
-              width: "52vw",
-              height: "78vh",
-              transform: `scale(${scale})`,
-              opacity,
-            }
-      }
-    >
-      <Link
-        href="/appointments"
-        onClick={(e) => {
-          if (window.innerWidth >= 768) {
-            e.preventDefault();
-            onExplore();
-          }
-        }}
-        className="group block h-full w-full relative"
-      >
-        <div
-          className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/50 to-black/20"
-          aria-hidden
-        />
-        <div className="absolute inset-0 flex flex-col justify-between p-8 md:p-10 lg:p-12 text-left">
-          <div>
-            <p className="text-white/90 text-xs font-medium uppercase tracking-[0.2em] mb-2">
-              {category}
-            </p>
-            <h3 className="font-serif text-2xl md:text-3xl lg:text-4xl font-semibold text-white tracking-tight mb-3 drop-shadow-sm">
-              {title}
-            </h3>
-            <p className="text-white/95 text-sm md:text-base max-w-md font-sans">
-              {description}
-            </p>
-          </div>
-          <div className="mt-6 flex items-center gap-3">
-            <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/25 backdrop-blur-sm text-white group-hover:bg-white/35 transition-all duration-300 group-hover:scale-110">
-              <ArrowRight className="h-5 w-5" aria-hidden />
-            </span>
-            <span className="text-sm font-medium text-white uppercase tracking-wider">
-              Explore Specialty
-            </span>
-          </div>
-        </div>
-      </Link>
-    </div>
-  );
-}
-
-function MobileCard({
-  title,
-  category,
-  description,
-}: {
-  title: string;
-  category: string;
-  description: string;
-}) {
-  return (
-    <div className="relative w-full aspect-[4/5] max-h-[85vh] rounded-[32px] overflow-hidden shadow-xl">
-      <div
-        className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800"
-        aria-hidden
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-8 text-left">
-        <p className="text-white/80 text-xs font-medium uppercase tracking-[0.2em] mb-2">
-          {category}
-        </p>
-        <h3 className="font-serif text-2xl font-semibold text-white tracking-tight mb-2">
-          {title}
-        </h3>
-        <p className="text-white/90 text-sm font-sans">{description}</p>
-        <Link
-          href="/appointments"
-          className="mt-4 inline-flex items-center gap-2 text-white font-medium text-sm uppercase tracking-wider hover:underline"
-        >
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white">
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </span>
-          Book Appointment
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 export function SpecialtiesSection() {
+  const reduce = useReducedMotion();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  const [overlayCard, setOverlayCard] = useState<number | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [scrollDistance, setScrollDistance] = useState(0);
 
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Measure how far the track needs to scroll horizontally
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOverlayCard(null);
-    };
-    if (overlayCard !== null) {
-      window.addEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "hidden";
+    function measure() {
+      if (!trackRef.current) return;
+      const trackWidth = trackRef.current.scrollWidth;
+      const viewWidth = window.innerWidth;
+      setScrollDistance(Math.max(0, trackWidth - viewWidth));
     }
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [overlayCard]);
-
-  useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
-  useEffect(() => {
-    if (!mounted || isMobile) return;
-    const onScroll = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-      const scrollY = window.scrollY;
-      const vh = window.innerHeight;
-      const scrollStart = el.offsetTop;
-      const scrollRange = Math.max(1, ((SCROLL_RUNWAY_VH - 100) / 100) * vh);
-      const progress = Math.max(0, Math.min(1, (scrollY - scrollStart) / scrollRange));
-      setScrollProgress(progress);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [mounted, isMobile]);
-
-  if (!mounted) {
-    return (
-      <section id="specialties" className="min-h-[100vh] bg-neutral-100 flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </section>
-    );
-  }
-
-  if (isMobile) {
-    return (
-      <section id="specialties" className="py-16 md:py-20 bg-neutral-100/80" aria-labelledby="specialties-heading">
-        <div className="container mx-auto px-4">
-          <h2 id="specialties-heading" className="font-serif text-3xl font-semibold text-center text-foreground mb-2">
-            Our Specialties
-          </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
-            Comprehensive neurological and spine care.
-          </p>
-          <div className="flex flex-col gap-8">
-            {SPECIALTIES.map((s, index) => (
-              <MobileCard
-                key={s.title}
-                title={s.title}
-                category={s.category}
-                description={s.description}
-              />
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              href="/appointments"
-              className="inline-flex items-center gap-2 text-secondary font-medium hover:underline"
-            >
-              Book an Appointment
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  const maxTranslate = -(TRACK_WIDTH_VW - 100 + TAIL_PADDING_VW);
-  const translateX = scrollProgress * maxTranslate;
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance]);
 
   return (
-    <>
+    <section id="specialties" aria-labelledby="specialties-heading">
+      {/* SEO-friendly hidden content for crawlers */}
+      <div className="sr-only">
+        <h2>Our Specialties — Neurosurgical Services by Dr. Nisarg Parmar</h2>
+        {SPECIALTIES.map((spec) => (
+          <div key={spec.title}>
+            <h3>{spec.title}</h3>
+            <p>{spec.description}</p>
+            <ul>
+              {spec.procedures.map((p) => (
+                <li key={p}>{p}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <p>
+          <Link href="/specialties">View all specialties</Link>
+        </p>
+      </div>
+
+      {/* ── Desktop: scroll-driven horizontal gallery ── */}
       <div
         ref={sectionRef}
-        className="relative"
-        style={{ height: `${SCROLL_RUNWAY_VH}vh` }}
-        aria-labelledby="specialties-heading"
+        className="hidden md:block relative"
+        style={{ height: "300vh" }}
       >
-        <div className="sticky top-[96px] left-0 w-full h-[calc(100vh-96px)] overflow-hidden bg-neutral-100/90 rounded-t-[32px] md:rounded-t-[40px]">
-          <div className="absolute top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-md border-b border-black/5 shadow-sm select-text">
-            <div className="container mx-auto px-4 py-5">
-              <SectionHeading
-                id="specialties-heading"
-                title="Our Specialties"
-                subtitle="Scroll to explore"
-                centered
-                className="mb-0"
-              />
-            </div>
+        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+          {/* Heading */}
+          <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8 mb-8">
+            <SectionHeading
+              id="specialties-heading"
+              title="Our Specialties"
+              subtitle="Comprehensive neurological and spine care powered by expertise."
+              centered={false}
+            />
           </div>
-          <div
-            className="absolute inset-0 flex items-center pl-[15vw] pt-[112px]"
-            style={{
-              transform: `translateX(${translateX}vw)`,
-            }}
+
+          {/* Cards track */}
+          <motion.div
+            ref={trackRef}
+            style={{ x }}
+            className="flex gap-7 will-change-transform pl-5 sm:pl-6 lg:pl-8 xl:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]"
           >
-            <div className="flex flex-nowrap gap-[4vw] pr-[15vw]">
-              {SPECIALTIES.map((s, index) => (
-                <CinematicCard
-                  key={s.title}
-                  title={s.title}
-                  category={s.category}
-                  description={s.description}
-                  bullets={s.bullets}
-                  index={index}
-                  translateX={translateX}
-                  isMobile={false}
-                  onExplore={() => setOverlayCard(index)}
-                />
-              ))}
+            {SPECIALTIES.map((spec, i) => {
+              const Icon = spec.icon;
+              return (
+                <article
+                  key={spec.title}
+                  className="group w-[min(68vw,540px)] flex-shrink-0 rounded-3xl bg-white border border-slate-200/80 shadow-lg hover:shadow-2xl transition-shadow duration-300 p-8 lg:p-10 flex flex-col"
+                >
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <Icon
+                        className="h-7 w-7 text-primary"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-[0.2em]">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="text-lg lg:text-xl font-bold text-foreground leading-tight">
+                        {spec.title}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <p className="text-foreground/65 text-sm lg:text-base leading-relaxed mb-5">
+                    {spec.description}
+                  </p>
+
+                  <ul
+                    className="space-y-2.5 mb-6 flex-1"
+                    aria-label={`${spec.title} procedures`}
+                  >
+                    {spec.procedures.map((proc) => (
+                      <li
+                        key={proc}
+                        className="flex items-start gap-2.5 text-sm text-foreground/75"
+                      >
+                        <span
+                          className="mt-[7px] h-1.5 w-1.5 rounded-full bg-secondary shrink-0"
+                          aria-hidden="true"
+                        />
+                        {proc}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link
+                    href="/specialties"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary hover:text-secondary/80 group-hover:gap-2.5 transition-all duration-300 mt-auto"
+                  >
+                    View all specialties
+                    <ArrowRight
+                      className="h-3.5 w-3.5"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </article>
+              );
+            })}
+
+            {/* Final CTA card */}
+            <div className="w-[min(68vw,540px)] flex-shrink-0 rounded-3xl bg-primary text-primary-foreground p-8 lg:p-10 flex flex-col items-center justify-center text-center gap-5">
+              <h3 className="text-xl lg:text-2xl font-bold">
+                Explore All Specialties
+              </h3>
+              <p className="text-primary-foreground/85 text-sm lg:text-base max-w-sm leading-relaxed">
+                View detailed information about all our neurosurgical services
+                and book a consultation.
+              </p>
+              <Button
+                variant="secondary"
+                className="rounded-full gap-2"
+                asChild
+              >
+                <Link href="/specialties">
+                  View All Specialties
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </Button>
+            </div>
+
+            {/* Right spacer */}
+            <div className="w-8 flex-shrink-0" aria-hidden="true" />
+          </motion.div>
+
+          {/* Scroll progress indicator */}
+          <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8 mt-8">
+            <div className="h-1 rounded-full bg-slate-200 overflow-hidden max-w-xs">
+              <motion.div
+                className="h-full rounded-full bg-secondary origin-left"
+                style={{ scaleX: scrollYProgress }}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Detail overlay */}
-      {overlayCard !== null && (
-        <div
-          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-300"
-          onClick={() => setOverlayCard(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="overlay-title"
-        >
-          <div
-            className="bg-card rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-border"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {(() => {
-              const s = SPECIALTIES[overlayCard];
-              if (!s) return null;
+      {/* ── Mobile: vertical cards ── */}
+      <div className="md:hidden py-12 bg-slate-50">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6">
+          <SectionHeading
+            title="Our Specialties"
+            subtitle="Comprehensive neurological and spine care powered by expertise."
+            className="mb-8"
+          />
+
+          <div className="space-y-4">
+            {SPECIALTIES.map((spec) => {
+              const Icon = spec.icon;
               return (
-                <>
-                  <div className="relative h-48 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 rounded-t-2xl overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                    <div className="absolute bottom-4 left-6">
-                      <p className="text-white/80 text-xs font-medium uppercase tracking-widest">
-                        {s.category}
-                      </p>
-                      <h2 id="overlay-title" className="font-serif text-2xl font-semibold text-white">
-                        {s.title}
-                      </h2>
+                <motion.article
+                  key={spec.title}
+                  initial={reduce ? false : { opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-30px" }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <Icon
+                        className="h-5 w-5 text-primary"
+                        aria-hidden="true"
+                      />
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setOverlayCard(null)}
-                      className="absolute top-4 right-4 p-2 rounded-full bg-black/40 text-white hover:bg-black/60 transition-colors focus-visible:ring-2 ring-white"
-                      aria-label="Close"
-                    >
-                      <X className="h-5 w-5" />
-                    </button>
+                    <h3 className="text-base font-semibold text-foreground">
+                      {spec.title}
+                    </h3>
                   </div>
-                  <div className="p-6 md:p-8">
-                    <Link
-                      href="/appointments"
-                      className="inline-flex items-center gap-2 rounded-full bg-secondary text-secondary-foreground px-6 py-3 font-medium hover:bg-secondary/90 transition-colors mb-6"
-                    >
-                      Book Appointment
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                    <p className="text-muted-foreground mb-6">{s.description}</p>
-                    <ul className="space-y-2">
-                      {s.bullets.map((b) => (
-                        <li key={b} className="flex items-start gap-2 text-foreground">
-                          <span className="text-secondary mt-1.5 h-1.5 w-1.5 rounded-full bg-secondary shrink-0" />
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </>
+
+                  <p className="text-sm text-foreground/65 leading-relaxed mb-3">
+                    {spec.description}
+                  </p>
+
+                  <ul
+                    className="space-y-1.5 mb-4"
+                    aria-label={`${spec.title} procedures`}
+                  >
+                    {spec.procedures.map((proc) => (
+                      <li
+                        key={proc}
+                        className="flex items-start gap-2 text-xs text-foreground/70"
+                      >
+                        <span
+                          className="mt-1 h-1 w-1 rounded-full bg-secondary shrink-0"
+                          aria-hidden="true"
+                        />
+                        {proc}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Link
+                    href="/specialties"
+                    className="inline-flex items-center gap-1 text-xs font-medium text-secondary"
+                  >
+                    Learn more
+                    <ArrowRight className="h-3 w-3" aria-hidden="true" />
+                  </Link>
+                </motion.article>
               );
-            })()}
+            })}
+          </div>
+
+          <div className="text-center mt-8">
+            <Button
+              variant="outline"
+              className="rounded-full text-sm gap-2"
+              asChild
+            >
+              <Link href="/specialties">
+                View All Specialties
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </Button>
           </div>
         </div>
-      )}
-    </>
+      </div>
+    </section>
   );
 }

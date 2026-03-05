@@ -27,7 +27,7 @@ export function SectionHeading({
         {title}
       </h2>
       {subtitle && (
-        <p className="text-muted-foreground text-base md:text-lg">{subtitle}</p>
+        <p className="text-foreground/60 text-base md:text-lg">{subtitle}</p>
       )}
     </div>
   );
